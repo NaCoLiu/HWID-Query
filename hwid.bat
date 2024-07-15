@@ -1,21 +1,29 @@
 
 @echo off
 setlocal enabledelayedexpansion
-echo QDI Tool v1.0 by NaCo
-echo ====================ÏµÍ³ĞÅÏ¢====================
-echo.
 
+powershell -Command "Write-Host '  ___  __  ____  ____    ____  _  _    __ _   __    ___  __      ' -ForegroundColor Green"
+powershell -Command "Write-Host ' / __)/  \(    \(  __)  (  _ \( \/ )  (  ( \ / _\  / __)/  \     ' -ForegroundColor Green"
+powershell -Command "Write-Host '( (__(  O )) D ( ) _)    ) _ ( )  /   /    //    \( (__(  O )    ' -ForegroundColor Green"
+powershell -Command "Write-Host ' \___)\__/(____/(____)  (____/(__/    \_)__)\_/\_/ \___)\__/     '-ForegroundColor Green"
+echo.
+powershell -Command "Write-Host ' / )( \/ )( \(  )(    \   /  \ / )( \(  __)(  _ \( \/ )' -ForegroundColor Green"
+powershell -Command "Write-Host ' ) __ (\ /\ / )(  ) D (  (  Q )) \/ ( ) _)  )   / )  / ' -ForegroundColor Green"
+powershell -Command "Write-Host ' \_)(_/(_/\_)(__)(____/   \__\)\____/(____)(__\_)(__/  '-ForegroundColor Green"
+echo.
+powershell -Command "Write-Host 'ç³»ç»Ÿä¿¡æ¯: ' -ForegroundColor DarkYellow"
+echo.
 for /f "tokens=2 delims==" %%i in ('wmic os get Caption /value') do set osName=%%i
 for /f "tokens=2 delims==" %%i in ('wmic os get Version /value') do set osVersion=%%i
 
 
 for /f "tokens=2 delims==" %%i in ('wmic computersystem get Name /value') do set systemName=%%i
 for /f "tokens=2 delims==" %%i in ('wmic cpu get Name /value') do set cpuName=%%i
-echo ÏµÍ³Ãû³Æ: %systemName%, ´¦ÀíÆ÷: %cpuName%
-echo WindowsÏµÍ³°æ±¾: %osName%, ÄÚºË°æ±¾: %osVersion%
+echo ç³»ç»Ÿåç§°: %systemName%, å¤„ç†å™¨: %cpuName%
+echo Windowsç³»ç»Ÿç‰ˆæœ¬: %osName%, å†…æ ¸ç‰ˆæœ¬: %osVersion%
 
 
-echo ÓÃ»§Ãû: %USERNAME%
+echo ç”¨æˆ·å: %USERNAME%
 
 
 for /f "tokens=2 delims==" %%i in ('wmic os get InstallDate /value') do set installDate=%%i
@@ -25,15 +33,15 @@ set day=%installDate:~6,2%
 set hour=%installDate:~8,2%
 set minute=%installDate:~10,2%
 set second=%installDate:~12,2%
-echo ÏµÍ³°²×°ÈÕÆÚ: %year%-%month%-%day% %hour%:%minute%:%second%
+echo ç³»ç»Ÿå®‰è£…æ—¥æœŸ: %year%-%month%-%day% %hour%:%minute%:%second%
 
-powershell -Command "$BSN = (Get-WmiObject win32_baseboard).SerialNumber ; Write-Host 'Ö÷°åĞòÁĞºÅ: ' -NoNewline; Write-Host $BSN -ForegroundColor Red"
+powershell -Command "$BSN = (Get-WmiObject win32_baseboard).SerialNumber ; Write-Host 'ä¸»æ¿åºåˆ—å·: ' -NoNewline; Write-Host $BSN -ForegroundColor Red"
 for /f "tokens=2 delims==" %%i in ('wmic computersystem get Manufacturer /value') do set systemManufacturer=%%i
 for /f "tokens=2 delims==" %%i in ('wmic computersystem get Model /value') do set systemModel=%%i
-echo ÏµÍ³ÖÆÔìÉÌ: %systemManufacturer%, ÏµÍ³ĞÍºÅ: %systemModel%
+echo ç³»ç»Ÿåˆ¶é€ å•†: %systemManufacturer%, ç³»ç»Ÿå‹å·: %systemModel%
 
 echo.
-echo ====================Íø¿¨ĞÅÏ¢====================
+powershell -Command "Write-Host 'ç½‘å¡ä¿¡æ¯: ' -ForegroundColor DarkYellow"
 echo.
 for /f "tokens=2 delims==" %%i in ('wmic nic where "NetEnabled=true" get Name /value') do (
     set adapterName=%%i
@@ -41,35 +49,36 @@ for /f "tokens=2 delims==" %%i in ('wmic nic where "NetEnabled=true" get Name /v
     for /f "tokens=2 delims==" %%l in ('wmic nicconfig where "Description='!adapterName!'" get DefaultIPGateway /value') do set adapterGateway=%%l
     for /f "tokens=2 delims==" %%k in ('wmic nicconfig where "Description='!adapterName!'" get IPAddress /value') do set IP=%%k
     set "fomartIP=!IP:~1,-2!"
-    echo ÊÊÅäÆ÷ĞÍºÅ: !adapterName!
+    echo é€‚é…å™¨å‹å·: !adapterName!
     for %%a in (!fomartIP!) do ( 
-        powershell -Command "Write-Host 'IPµØÖ·: %%~a'"
+        powershell -Command "Write-Host 'IPåœ°å€: %%~a'"
     )
-    powershell -Command "Write-Host 'MACµØÖ·: ' -NoNewline; Write-Host '!adapterMAC!' -ForegroundColor Red"
+    powershell -Command "Write-Host 'MACåœ°å€: ' -NoNewline; Write-Host '!adapterMAC!' -ForegroundColor Red"
     set "trimmedString=!adapterGateway:~1,-2!"
     for %%a in (!trimmedString!) do ( 
-         powershell -Command "Write-Host 'Íø¹Ø: %%~a'"
+         powershell -Command "Write-Host 'ç½‘å…³: %%~a'"
     )
 )
 
 
-powershell -Command "try { $ip = Invoke-RestMethod https://myip.ipip.net/s; Write-Host '¹«ÍøIPµØÖ·£º' -NoNewline; Write-Host $ip -ForegroundColor Red } catch { Write-Host 'ÎŞ·¨»ñÈ¡¹«ÍøIPµØÖ·' `n -ForegroundColor Yellow }"
+powershell -Command "try { $ip = Invoke-RestMethod https://myip.ipip.net/s; Write-Host 'å…¬ç½‘IPåœ°å€ï¼š' -NoNewline; Write-Host $ip -ForegroundColor Red } catch { Write-Host 'æ— æ³•è·å–å…¬ç½‘IPåœ°å€' `n -ForegroundColor Yellow }"
 
-
-echo ================TPM ±³ÊéÃÜÔ¿ĞÅÏ¢================
+powershell -Command "Write-Host 'TPM èƒŒä¹¦å¯†é’¥ä¿¡æ¯: ' -ForegroundColor DarkYellow"
 echo.
-powershell -Command "$tpm = Get-Tpm; Write-Host 'TPM Æ·ÅÆ: '$tpm.ManufacturerIdTxt"
-powershell -Command "$info = Get-TpmEndorsementKeyInfo -Hash 'sha256'; Write-Host '¹«Ô¿¹şÏ£Öµ: ' -NoNewline; Write-Host $info.PublicKeyHash -ForegroundColor Red; foreach ($cert in $info.ManufacturerCertificates) { if ($cert.SerialNumber) { Write-Host 'TPM SN: ' -NoNewline; Write-Host $cert.SerialNumber -ForegroundColor Red; Write-Host 'Ö¸ÎÆ: '$cert.Thumbprint; break; } }"
+powershell -Command "$tpm = Get-Tpm; Write-Host 'TPM å“ç‰Œ: '$tpm.ManufacturerIdTxt"
+powershell -Command "$info = Get-TpmEndorsementKeyInfo -Hash 'sha256'; Write-Host 'å…¬é’¥å“ˆå¸Œå€¼: ' -NoNewline; Write-Host $info.PublicKeyHash -ForegroundColor Red; foreach ($cert in $info.ManufacturerCertificates) { if ($cert.SerialNumber) { Write-Host 'TPM SN: ' -NoNewline; Write-Host $cert.SerialNumber -ForegroundColor Red; Write-Host 'æŒ‡çº¹: '$cert.Thumbprint; break; } }"
 echo.
-echo ====================Ó²ÅÌĞÅÏ¢====================
+powershell -Command "Write-Host 'ç¡¬ç›˜ä¿¡æ¯: ' -ForegroundColor DarkYellow"
 echo.
-powershell -Command "Get-WmiObject Win32_DiskDrive | ForEach-Object { $model = $_.Model; $serialNumber = $_.SerialNumber; Write-Host 'Ó²ÅÌĞÍºÅ£º'$model 'Ó²ÅÌSNÂë£º' -NoNewline; Write-Host $serialNumber -ForegroundColor Red }"
+powershell -Command "Get-WmiObject Win32_DiskDrive | ForEach-Object { $model = $_.Model; $serialNumber = $_.SerialNumber; Write-Host 'ç¡¬ç›˜å‹å·ï¼š'$model 'ç¡¬ç›˜SNç ï¼š' -NoNewline; Write-Host $serialNumber -ForegroundColor Red }"
 echo.
-echo ====================ÆäËûĞÅÏ¢====================
+powershell -Command "Write-Host 'å†…å­˜ä¿¡æ¯: ' -ForegroundColor DarkYellow"
 echo.
-powershell -Command "Get-WmiObject Win32_PhysicalMemory | ForEach-Object { $manufacturer = $_.Manufacturer; $serialNumber = $_.SerialNumber; Write-Host \"ÄÚ´æÌõÆ·ÅÆ£º$manufacturer ÄÚ´æÌõID£º$serialNumber\" }"
-powershell -Command "Get-WmiObject Win32_VideoController | ForEach-Object { $model = $_.Name; $pnpDeviceID = $_.PNPDeviceID; Write-Host \"ÏÔ¿¨ĞÍºÅ£º$model ÏÔ¿¨ID £º$pnpDeviceID\" }"
+powershell -Command "Get-WmiObject Win32_PhysicalMemory | ForEach-Object { $manufacturer = $_.Manufacturer; $serialNumber = $_.SerialNumber; Write-Host \"å†…å­˜æ¡å“ç‰Œï¼š$manufacturer å†…å­˜æ¡IDï¼š$serialNumber\" }"
+echo.
+powershell -Command "Write-Host 'æ˜¾å¡ä¿¡æ¯: ' -ForegroundColor DarkYellow"
+echo.
+powershell -Command "Get-WmiObject Win32_VideoController | ForEach-Object { $model = $_.Name; $pnpDeviceID = $_.PNPDeviceID; Write-Host \"æ˜¾å¡å‹å·ï¼š$model æ˜¾å¡ID ï¼š$pnpDeviceID\" }"
 echo.
 
 pause
-
