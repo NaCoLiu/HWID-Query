@@ -2,7 +2,7 @@
 QDI Tool v1.0 by NaCo
 ====================系统信息====================
 
-系统名称: DESKTOP-NACO, 处理器: 11th Gen Intel(R) Core(TM) i9-13900K @ 5.20GHz
+系统名称: DESKTOP-NACO, 处理器: 13th Gen Intel(R) Core(TM) i9-13900K @ 5.20GHz
 Windows系统版本: Microsoft Windows 11 专业工作站版, 内核版本: 10.0.22631
 用户名: Administrator
 系统安装日期: 2024-07-11 12:34:33
