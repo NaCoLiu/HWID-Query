@@ -1,7 +1,18 @@
 
 @echo off
 setlocal enabledelayedexpansion
-
+:: 检查是否具有管理员权限
+net session >nul 2>&1
+if %errorLevel% == 0 (
+    goto doWork
+) else (
+    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+    echo UAC.ShellExecute "%~s0", "", "", "runas", 1 >> "%temp%\getadmin.vbs"
+    "%temp%\getadmin.vbs"
+    exit /B
+)
+ 
+:doWork
 powershell -Command "Write-Host '  ___  __  ____  ____    ____  _  _    __ _   __    ___  __      ' -ForegroundColor Green"
 powershell -Command "Write-Host ' / __)/  \(    \(  __)  (  _ \( \/ )  (  ( \ / _\  / __)/  \     ' -ForegroundColor Green"
 powershell -Command "Write-Host '( (__(  O )) D ( ) _)    ) _ ( )  /   /    //    \( (__(  O )    ' -ForegroundColor Green"
@@ -35,7 +46,12 @@ set minute=%installDate:~10,2%
 set second=%installDate:~12,2%
 echo 系统安装日期: %year%-%month%-%day% %hour%:%minute%:%second%
 
-powershell -Command "$BSN = (Get-WmiObject win32_baseboard).SerialNumber ; Write-Host '主板序列号: ' -NoNewline; Write-Host $BSN -ForegroundColor Red"
+powershell -Command "$B = (Get-WmiObject win32_baseboard).SerialNumber ; Write-Host '主板序列号: ' -NoNewline; Write-Host $B -ForegroundColor Red"
+powershell -Command "$B = (Get-WmiObject Win32_Processor).SerialNumber ; Write-Host 'CPU序列号: ' -NoNewline; Write-Host $B -ForegroundColor Red"
+powershell -Command "$B = (Get-WmiObject Win32_BIOS).SerialNumber ; Write-Host 'BIOS SN: ' -NoNewline; Write-Host $B -ForegroundColor Red"
+powershell -Command "$B = (Get-WmiObject Win32_ComputerSystemProduct).UUID ; Write-Host '主板UUID: ' -NoNewline; Write-Host $B -ForegroundColor Red"
+
+
 for /f "tokens=2 delims==" %%i in ('wmic computersystem get Manufacturer /value') do set systemManufacturer=%%i
 for /f "tokens=2 delims==" %%i in ('wmic computersystem get Model /value') do set systemModel=%%i
 echo 系统制造商: %systemManufacturer%, 系统型号: %systemModel%
